@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block title %}Edit profile for user {{ user.email }}| {{ super }}{% endblock %}
+
+{% block body %}
+<form method="POST" action="{% url "edit_profile" pk=user.pk %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form1.as_p }}
+    {{ form2.as_p }}
+    <input type="submit" class="button-primary" value="Update Profile">
+</form>
+{% endblock %}

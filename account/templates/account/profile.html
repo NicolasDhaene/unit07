@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+{% load static from staticfiles %}
+
+{% block title %}
+    {{ block.super }} - {{ profile.first_name|title }}'s Profile
+{% endblock %}
+
+{% block body %}
+    <div class="grid-20">
+        {% if user.userprofile.avatar %}
+            <img class="img-responsive img-circle" src="{{ profile.avatar.url }}">
+        {% else %}
+            <img class="img-responsive img-circle" src="{% static "images/default_avatar.png" %}">
+        {% endif %}
+    </div>
+    <h1>Your Profile</h1>
+    <div class="grid-30">
+        <h2>First Name</h2>
+        <p>{{ profile.first_name|title }}</p>
+        <h2>Last Name</h2>
+        <p>{{ profile.last_name|title }}</p>
+        <h2>Date of birth</h2>
+        <p>{{ profile.date_of_birth }}</p>
+        <h2>Bio</h2>
+        <p>{{ profile.bio }}</p>
+    </div>
+    <div class="grid-30">
+        <h2>Email</h2>
+        <p>{{ user.email }}</p>
+        <h2>Country</h2>
+        <p>{{ profile.country }}</p>
+        <h2>Region</h2>
+        <p>{{ profile.region}}</p>
+        <h2>City</h2>
+        <p>{{ profile.city }}</p>
+    </div>
+    <div class="grid-20">
+        <a href="{% url "edit_profile" pk=user.pk %}">Edit Profile</a>
+        <br>
+        <a href="{% url "change_password" pk=user.pk %}">Change Password</a>
+    </div>
+{% endblock %}
