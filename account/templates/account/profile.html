@@ -34,9 +34,11 @@
         <h2>City</h2>
         <p>{{ profile.city }}</p>
     </div>
+    {% if request.user == user %}
     <div class="grid-20">
         <a href="{% url "edit_profile" pk=user.pk %}">Edit Profile</a>
         <br>
         <a href="{% url "change_password" pk=user.pk %}">Change Password</a>
     </div>
+    {% endif %}
 {% endblock %}
