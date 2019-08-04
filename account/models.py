@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 
 
 class UserManager(BaseUserManager):
+    """Create and manage users"""
     def create_user(self, email, password=None, is_active=True, is_staff=False, is_superuser=False):
         if not email:
             raise ValueError("Creating a new user requires an email")
@@ -37,6 +38,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    """User model information"""
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
@@ -49,6 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class UserProfile(models.Model):
+    """User profile information"""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255, null=True)
     last_name = models.CharField(max_length=255, null=True)

@@ -6,7 +6,7 @@ import re
 
 
 class UserCreateForm(UserCreationForm):
-
+    """form for creating a new user"""
     def __init__(self, *args, **kwargs):
         super(UserCreateForm, self).__init__(*args, **kwargs)
 
@@ -23,7 +23,7 @@ class UserCreateForm(UserCreationForm):
 
 
 class UserProfileForm(ModelForm):
-
+    """form for updating the user profile"""
     class Meta:
         model = UserProfile
         widgets = {"date_of_birth": SelectDateWidget(attrs={"style": "width: 15%; "
@@ -42,6 +42,7 @@ class UserProfileForm(ModelForm):
 
 
 class EditAccountForm(ModelForm):
+    """form for editing the user account"""
     verify_email = EmailField(label="Verify email address.")
 
     class Meta:
@@ -59,7 +60,7 @@ class EditAccountForm(ModelForm):
 
 
 class ChangePasswordForm(PasswordChangeForm):
-
+    """form for changing the user's password"""
     class Meta:
         fields = ["new_password1", "new_password2"]
 
@@ -101,11 +102,18 @@ class ChangePasswordForm(PasswordChangeForm):
         if not re.search("([@#$])+", new_password):
             raise ValidationError("The new password must include the at least one of these : @, #, or $.")
 
-        user_first_name = user.userprofile.first_name.lower()
-        user_last_name = user.userprofile.last_name.lower()
+        user_email = user.email.lower()
+        password_restrictions = [user_email]
+        if user.userprofile.first_name:
+            user_first_name = user.userprofile.first_name.lower()
+            password_restrictions += user_first_name
+        if user.userprofile.last_name:
+            user_last_name = user.userprofile.last_name.lower()
+            password_restrictions += user_last_name
 
-        if user_first_name in new_password.lower() or user_last_name in new_password.lower():
-            raise ValidationError("The new password cannot contain your username or parts of your full name.")
+        for restriction in password_restrictions:
+            if restriction in new_password.lower():
+                raise ValidationError("The new password cannot contain your username or parts of your full name.")
 
         return self.cleaned_data
 

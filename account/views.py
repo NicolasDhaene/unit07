@@ -8,6 +8,7 @@ from .models import User, UserProfile
 
 
 def sign_up(request):
+    """creation and log in of a new user"""
     form = UserCreateForm()
     if request.method == "POST":
         form = UserCreateForm(data=request.POST)
@@ -28,12 +29,14 @@ def sign_up(request):
 
 @login_required
 def sign_out(request):
+    """sign out of a logged in user"""
     logout(request)
     messages.success(request, "You're now signed out.")
     return redirect("home")
 
 
 def sign_in(request):
+    """sign-in of an existing new user"""
     form = AuthenticationForm()
     if request.method == "POST":
         form = AuthenticationForm(data=request.POST)
@@ -53,6 +56,7 @@ def sign_in(request):
 
 @login_required
 def view_profile(request, pk):
+    """view a profile"""
     user = User.objects.get(pk=pk)
     profile = UserProfile.objects.get(user=user)
     return render(request, 'account/profile.html', {'user': user, "profile": profile})
@@ -60,6 +64,7 @@ def view_profile(request, pk):
 
 @login_required
 def edit_profile(request, pk):
+    """edit a profile (and user's email)"""
     user = User.objects.get(pk=pk)
     profile = UserProfile.objects.get(user=user)
     form1 = EditAccountForm(instance=user)
@@ -83,6 +88,7 @@ def edit_profile(request, pk):
 
 @login_required
 def change_password(request, pk):
+    """change a user password"""
     user = request.user
     form = ChangePasswordForm(user=request.user, request=request)
     if request.method == "POST":
